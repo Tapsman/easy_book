@@ -6,6 +6,7 @@ drop table if exists users;
 CREATE TABLE if not exists users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
     password VARCHAR(100) NOT NULL,
     role ENUM('admin', 'staff', 'user') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
