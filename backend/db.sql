@@ -1,8 +1,8 @@
+drop database db_library;
 create database if not exists db_library;
 use db_library;
 
 -- Users table
-drop table if exists users;
 CREATE TABLE if not exists users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
@@ -13,17 +13,16 @@ CREATE TABLE if not exists users (
 );
 
 -- Books table
-drop table if exists books;
 CREATE TABLE if not exists books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    available BOOLEAN DEFAULT TRUE,
+    image VARCHAR(255),
+    quantity INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Transactions table
-drop table if exists transactions;
 CREATE TABLE if not exists transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -35,4 +34,5 @@ CREATE TABLE if not exists transactions (
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-
+select * from users;
+delete from users where full_name like "loay%";
