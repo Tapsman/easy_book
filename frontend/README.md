@@ -1,0 +1,1 @@
+# front side of the project where the data will be displayed based on rules
