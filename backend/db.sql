@@ -35,4 +35,4 @@ CREATE TABLE if not exists transactions (
 );
 
 select * from users;
-delete from users where full_name like "loay%";
+delete from users where full_name like "str%";

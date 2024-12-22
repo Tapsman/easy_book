@@ -21,6 +21,12 @@ user_model = api.model('User', {
     'role': fields.String(description='The role of the user', default='user')
 })
 
+# login model 
+login_model = api.model("Login",{
+    'username':fields.String(required=True, description = 'username'),
+    'password':fields.String(required=True, description="password")
+})
+
 # connectiong to mysql server
 app.config['MYSQL_HOST'] = 'localhost'
 app.config["MYSQL_USER"] = "root"
@@ -65,7 +71,18 @@ class registerUser(Resource):
 
         return {"message":"User registered successfully"}, 201
 
- 
+# login endpoint
+
+@ns.route("/login")
+class LoginUser(Resource):
+    @api.expect(login_model)
+    def post(self):
+        # getting data from the request
+        data = request.get_json
+        username = data.get("username")
+        password = data.get("password")
+
+
 
 
 
