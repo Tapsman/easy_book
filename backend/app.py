@@ -38,7 +38,6 @@ mysql = MySQL(app)
 # configurating app
 app.config['SECRET_KEY'] = 'LoayAbassiTheBestInTheWorld'
 app.config["JWT_SECRET_KEY"] = 'LoayAbassiTheBestInTheWorld'
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
 
 jwt = JWTManager(app)
 
