@@ -8,7 +8,9 @@ CREATE TABLE if not exists users (
     username VARCHAR(100) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     password VARCHAR(100) NOT NULL,
-    role ENUM('admin', 'staff', 'user') DEFAULT 'user',
+    role ENUM('staff', 'user') DEFAULT 'user',
+    image VARCHAR(255) not null,
+    borrowed_books JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -35,4 +37,4 @@ CREATE TABLE if not exists transactions (
 );
 
 select * from users;
-delete from users where full_name like "str%";
+
