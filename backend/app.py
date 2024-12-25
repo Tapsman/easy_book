@@ -35,11 +35,11 @@ app.config["MYSQL_PASSWORD"] = "loay"
 app.config["MYSQL_DB"] = "db_library"
 mysql = MySQL(app)
 
-# configurating secret key
+# configurating app
 app.config['SECRET_KEY'] = 'LoayAbassiTheBestInTheWorld'
 app.config["JWT_SECRET_KEY"] = 'LoayAbassiTheBestInTheWorld'
-print("SECRET_KEY:", app.config['SECRET_KEY'] )
-print("JWT_SECRET_KEY:", app.config["JWT_SECRET_KEY"])
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
+
 jwt = JWTManager(app)
 
 # register endpoint
@@ -96,11 +96,11 @@ class LoginUser(Resource):
             return {"message":"Invalid username"}, 401
         
         stored_pass = user[3]
-        print("stored password : ", stored_pass)
         if not stored_pass or not bcrypt.checkpw(password.encode('utf-8'), stored_pass.encode("utf-8")):
             return {"message":"Invalid password"}
-        access_token = create_access_token(identity={"id":user[0],"username":user[1]})
-        return {"access_token":access_token,"message":"Login Successful"}
+        access_token = create_access_token(identity={"id":user[0],"username":user[1]}, fresh=True)
+        
+        return {"access_token":access_token,"message":"Login Successful"}, 200 
     
 
 if __name__ == "__main__":
