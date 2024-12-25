@@ -13,7 +13,7 @@ api = Api(app, version='1.0', title='easy_book API', description='A simple libra
 ns = api.namespace('users', description='User operations')
 
 # registration model
-user_model = api.model('User', {
+user_model = api.model('Register', {
     'first_name': fields.String(required=True, description='The first name of the user'),
     'last_name': fields.String(required=True, description='The last name of the user'),
     'username': fields.String(required=True, description='The username of the user'),
@@ -82,7 +82,23 @@ class LoginUser(Resource):
         username = data.get("username")
         password = data.get("password")
 
+        # database access
+        curs = mysql.connection.cursor()
+        curs.execute("SELECT * FROM users WHERE username = %s",(username,))
+        user = curs.fetchone()
 
+        if not user : 
+            return {"message":"Invalid username"}, 401
+        
+        stored_pass = user[2]
+        if not bcrypt.checkpw(password.encode('utf-8'), stored_pass.encode("utf-8")):
+            return {"message":"Invalid password"}
+        access_token = create_access_token(identity={"id":user[0],"username":user[1]})
+        return {"access_token":access_token,"message":"Login Successful"}
+    
+
+
+        
 
 
 
