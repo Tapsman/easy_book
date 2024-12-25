@@ -11,9 +11,24 @@ app = Flask(__name__)
 
 # Setting up restplus api
 api = Api(app, version='1.0', title='easy_book API', description='managing library with ease',security=[{'BearerAuth':[]}])
-ns = api.namespace('user', description='Users')
-ns2 = api.namespace('book', description='Books')
+users = api.namespace('users', description='Users operations')
+books = api.namespace('books', description='Books operations')
 
+
+# connectiong to mysql server
+app.config['MYSQL_HOST'] = 'localhost'
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = "loay"
+app.config["MYSQL_DB"] = "db_library"
+mysql = MySQL(app)
+
+# configurating app
+app.config['SECRET_KEY'] = 'LoayAbassiTheBestInTheWorld'
+app.config["JWT_SECRET_KEY"] = 'LoayAbassiTheBestInTheWorld'
+
+jwt = JWTManager(app)
+
+# users
 # registration model
 user_model = api.model('Register', {
     'first_name': fields.String(required=True, description='The first name of the user'),
@@ -30,21 +45,8 @@ login_model = api.model("Login",{
     'password':fields.String(required=True, description="password")
 })
 
-# connectiong to mysql server
-app.config['MYSQL_HOST'] = 'localhost'
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "loay"
-app.config["MYSQL_DB"] = "db_library"
-mysql = MySQL(app)
-
-# configurating app
-app.config['SECRET_KEY'] = 'LoayAbassiTheBestInTheWorld'
-app.config["JWT_SECRET_KEY"] = 'LoayAbassiTheBestInTheWorld'
-
-jwt = JWTManager(app)
-
 # register endpoint
-@ns.route('/register')
+@users.route('/register')
 class registerUser(Resource):
     @api.expect(user_model)
     def post(self):
@@ -77,7 +79,7 @@ class registerUser(Resource):
         return {"message":"User registered successfully"}, 201
 
 # login endpoint
-@ns.route("/login")
+@users.route("/login")
 class LoginUser(Resource):
     @api.expect(login_model)
     def post(self):
@@ -102,7 +104,7 @@ class LoginUser(Resource):
         return {"access_token":access_token,"message":"Login Successful"}, 200 
 
 # specific user details 
-@ns.route("/details/<int:user_id>")
+@users.route("/details/<int:user_id>")
 class UserInfo(Resource):
 
     @jwt_required()
@@ -126,9 +128,10 @@ class UserInfo(Resource):
             "image":user_data[4],
             "borrowed_books":user_data[5]
         }, 200
+    
 
 # listing paginated users
-@ns.route("/list")
+@users.route("/list")
 class GetUsers(Resource):
     @jwt_required()
     def get(self):
@@ -160,7 +163,7 @@ class GetUsers(Resource):
 
         return {"users": user_list, "page": page, "limit": limit}, 200
 
-@ns.route("/delete/<int:user_id>")
+@users.route("/delete/<int:user_id>")
 class DeleteUser(Resource):
     @jwt_required()
     def delete(self, user_id):
@@ -182,9 +185,45 @@ class DeleteUser(Resource):
 
         return {"message": "User deleted successfully."}, 200
 
+# books
+# Book model
+book_model = api.model('Book', {
+    'title': fields.String(required=True, description='The title of the book'),
+    'description': fields.String(description='The description of the book'),
+    'image': fields.String(description='Image of the book'),
+    'quantity': fields.Integer(description='The quantity of books', default=1)
+})
+
+# adding book endpoint
+@books.route('/')
+class AddBook(Resource):
+    @api.expect(book_model)  
+    @jwt_required()
+    def post(self):
+        data = request.get_json()
+
+        title = data.get("title")
+        description = data.get("description", "")
+        image = data.get("image", "")
+        quantity = data.get("quantity", 1)
+
+        
+        if not title:
+            return {"message": "Title is required."}, 400
+
+        # Insert book into the database
+        curs = mysql.connection.cursor()
+        curs.execute(
+            "INSERT INTO books (title, description, image, quantity) VALUES (%s, %s, %s, %s)",
+            (title, description, image, quantity),
+        )
+        mysql.connection.commit()
+        curs.close()
+
+        return {"message": "Book added successfully."}, 201
 
 if __name__ == "__main__":
-    api.add_namespace(ns)
-    api.add_namespace(ns2)
+    api.add_namespace(users)
+    api.add_namespace(books)
     app.run(debug=True)
 

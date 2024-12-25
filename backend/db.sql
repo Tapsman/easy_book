@@ -37,4 +37,4 @@ CREATE TABLE if not exists transactions (
 );
 
 select * from users;
-
+select * from books;
