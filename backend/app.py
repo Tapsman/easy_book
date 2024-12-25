@@ -105,11 +105,11 @@ class LoginUser(Resource):
 @ns.route("/details/<int:user_id>")
 class UserInfo(Resource):
 
-    #@jwt_required()
+    @jwt_required()
     def get(self,user_id):
-        #current_user = get_jwt_identity()
-        #if current_user["id"]!=user_id and current_user["role"]!=user_id:
-        #    return {"message": "Unauthorized access."}, 403
+        current_user = get_jwt_identity()
+        if current_user["id"]!=user_id and current_user["role"]!="staff":
+            return {"message": "Unauthorized access."}, 403
     
         curs = mysql.connection.cursor()
         curs.execute("SELECT id, username, full_name, role, image, borrowed_books FROM users WHERE id = %s", (user_id,))
@@ -130,9 +130,12 @@ class UserInfo(Resource):
 # listing paginated users
 @ns.route("/list")
 class GetUsers(Resource):
-    #@jwt_required()
+    @jwt_required()
     def get(self):
         # setting page, limit offset
+        current_user = get_jwt_identity()
+        if current_user["role"]!="staff":
+            return {"message": "Unauthorized access."}, 403
         page = request.args.get('page', 1, type=int)
         limit = request.args.get('limit', 10, type=int)
         offset = (page - 1) * limit
@@ -157,7 +160,7 @@ class GetUsers(Resource):
 
         return {"users": user_list, "page": page, "limit": limit}, 200
 
-@ns.route("/<int:user_id>")
+@ns.route("/delete/<int:user_id>")
 class DeleteUser(Resource):
     @jwt_required()
     def delete(self, user_id):
