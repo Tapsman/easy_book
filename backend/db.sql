@@ -9,7 +9,7 @@ CREATE TABLE if not exists users (
     full_name VARCHAR(255) NOT NULL,
     password VARCHAR(100) NOT NULL,
     role ENUM('staff', 'user') DEFAULT 'user',
-    image VARCHAR(255) not null,
+    image VARCHAR(255) ,
     borrowed_books JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

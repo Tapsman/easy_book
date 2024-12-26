@@ -4,10 +4,22 @@ from flask_jwt_extended import JWTManager, create_access_token,jwt_required, get
 import bcrypt
 import os
 from flask_restx import Api, Resource, fields
-
-
+from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+USER_UPLOAD_FOLDER = 'static/user_images/'
+BOOK_UPLOAD_FOLDER = 'static/book_images/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['USER_UPLOAD_FOLDER'] = USER_UPLOAD_FOLDER
+app.config['BOOK_UPLOAD_FOLDER'] = BOOK_UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Setting up restplus api
 api = Api(app, version='1.0', title='easy_book API', description='managing library with ease',security=[{'BearerAuth':[]}])
@@ -36,7 +48,6 @@ user_model = api.model('Register', {
     'username': fields.String(required=True, description='The username of the user'),
     'password': fields.String(required=True, description='The password of the user'),
     'role': fields.String(description='The role of the user', default='user'),
-    'image': fields.String(description='Profile image URL'),
 })
 
 # login model 
@@ -50,14 +61,27 @@ login_model = api.model("Login",{
 class registerUser(Resource):
     @api.expect(user_model)
     def post(self):
-        data = request.get_json()
+        data = request.form.to_dict()
+        print("here")
+
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         username = data.get("username")
         password = data.get("password")
         role = data.get("role","user")
         full_name = f"{first_name} {last_name}"
-        image = data.get("image")
+
+        # image processing 
+        image = request.files.get("image")
+        image_path = None
+
+
+        if image:
+            image_filename = f"{username}_{secure_filename(image.filename)}"
+            image_path = os.path.join(app.config['USER_UPLOAD_FOLDER'], image_filename)
+            print(image_path)
+            os.makedirs(app.config['USER_UPLOAD_FOLDER'], exist_ok=True)
+            image.save(image_path)
 
         curs = mysql.connection.cursor()
         curs.execute("SELECT * FROM users WHERE username = %s",(username,))
@@ -70,9 +94,8 @@ class registerUser(Resource):
         hashed_pwd = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode("utf-8")
         
         # commiting datat to the database
-        print(image)
         curs.execute("INSERT INTO users (username, password, full_name, role, image) VALUES (%s, %s, %s, %s, %s)",
-                     (username, hashed_pwd, full_name, role, image))
+                     (username, hashed_pwd, full_name, role, image_filename))
         curs.connection.commit()
         curs.close()
 
@@ -195,18 +218,36 @@ book_model = api.model('Book', {
 })
 
 # adding book endpoint
-@books.route('/')
+@books.route('/add')
 class AddBook(Resource):
     @api.expect(book_model)  
-    @jwt_required()
+    #@jwt_required()
     def post(self):
-        data = request.get_json()
+        print("Request form:", request.form)
+        print("Request files:", request.files)
+
+
+        #current_user = get_jwt_identity()
+        #if current_user["role"] != "staff":
+        #    return {"message": "Unauthorized access."}, 403
+        
+        data = request.form.to_dict()
 
         title = data.get("title")
         description = data.get("description", "")
-        image = data.get("image", "")
         quantity = data.get("quantity", 1)
 
+        # image processing 
+        image = request.files.get("image")
+        image_path = None
+
+
+        if image:
+            image_filename = f"{title}_{secure_filename(image.filename)}"
+            image_path = os.path.join(app.config['BOOK_UPLOAD_FOLDER'], image_filename)
+            print(image_path)
+            os.makedirs(app.config['BOOK_UPLOAD_FOLDER'], exist_ok=True)
+            image.save(image_path)
         
         if not title:
             return {"message": "Title is required."}, 400
@@ -215,7 +256,7 @@ class AddBook(Resource):
         curs = mysql.connection.cursor()
         curs.execute(
             "INSERT INTO books (title, description, image, quantity) VALUES (%s, %s, %s, %s)",
-            (title, description, image, quantity),
+            (title, description, image_filename, quantity),
         )
         mysql.connection.commit()
         curs.close()
