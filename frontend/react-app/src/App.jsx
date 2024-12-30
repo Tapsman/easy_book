@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import headerImage from './images/pexels-pixabay-256541.jpg';
+import poetryImage from './images/pexels-pixabay-256559.jpg';
+import humorImage from './images/humor.2.jpg';
+import actionImage from './images/action.jpg';
+import './App.css';
+
+/* These are the pages for the categories */
+const Poetry = () => <div><h1>Poetry Category</h1></div>
+const Humor = () => <div><h1>Humor Category</h1></div>
+const Action = () => <div><h1>Action Category</h1></div>
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [selectedCategory, setisSelectedCategory] = useState(null);
+
+  const handleCateoryClick = (category) => {
+    /* Sets, so if it clicked again, it will be closed */
+    setisSelectedCategory((previousCategory) =>
+      previousCategory === category ? null : category
+    );
+  }
+
+  const handleLoginClick = () => {
+    setShowLogin(true);
+    setShowSignUp(false); /* It then hides signup if login is clicked */
+  };
+
+  const handleSignUpClick = () => {
+    setShowSignUp(true);
+    setShowLogin(false); /* Hides signup if login is clicked */
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+    <div>
+      <header className="header">
+        <div className="header-image">
+	  <img src={headerImage} alt="Library welcoming image" />
+          <div className="message">Welcome to the state-of-the-art Library!</div>
+        </div>
+        <nav className="nav">
+          <button className="btn" onClick={handleLoginClick}>Login</button>
+          <button className="btn" onClick={handleSignUpClick}>Sign Up</button>
+        </nav>
+      </header>
+      <main className="categories">
+        <Link to="/poetry" className="category">
+	  <img src={poetryImage} alt="Poetry" />
+	  Category 1: Poetry
+	</Link>
+	<Link to="/humor" className="category">
+	  <img src={humorImage} alt="Humor" />
+	  Category 2: Humor
+	</Link>
+	<Link to="/action" className="category">
+	  <img src={actionImage} alt="Action" />
+	  Category 3: Action
+	</Link>
+      </main>
+      
+      {/* The Routes */}
+      <Routes>
+        <Route path="/poetry" element={<Poetry />} />
+	<Route path="/humor" element={<Humor />} />
+	<Route path="/action" element={<Action />} />
+      </Routes>
+    </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;

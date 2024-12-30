@@ -1,42 +1,146 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* App.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(245, 242, 248);
+  color: #666;
+}
+
+/* This is the header section */
+.header {
+  height: auto;
+  width: 155%;
+}
+
+.header-image img {
+  width: 70%;
+  height: 500px;
+  object-fit: cover;
+}
+
+.message {
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 1.5rem;
+  padding: 10px;
+  bottom: 15%;
+  left: 16%;
+  transform: translateX(-50%);
+  border-radius: 5px; /* Adds a round corner */
+  position: absolute;
+  font-weight: bold;
+  color: white;
+}
+
+/* Adding button on-click navigation */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.btn {
+  background-color: #601BBC;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0058b3;
+}
+
+/* The categories section */
+.categories {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  margin-left: 350px;
+  gap: 70px;
+}
+
+.category {
+  width: 200px;
+  height: 100px;
+  flex: 1;
   text-align: center;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background-color: #fff;
+  padding: 20px;
+  right: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.category img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 8px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.category:hover {
+  transform: scale(1.05);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #008bff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .categories {
+    flex-direction: column;
+    align-items: center;
   }
-  to {
-    transform: rotate(360deg);
+
+  .category {
+    max-width: 30%;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .header {
+    height: 200px;
   }
-}
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .nav {
+    flex-direction: column;
+    align-items: center;
+  }
 }
