@@ -61,7 +61,7 @@ function App() {
 	</Link>
       </main>
       
-      {/* The Routes */}
+      {/* These are the Route paths */}
       <Routes>
         <Route path="/poetry" element={<Poetry />} />
 	<Route path="/humor" element={<Humor />} />
