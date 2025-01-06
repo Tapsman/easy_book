@@ -8,17 +8,6 @@ import actionImage from './images/action.jpg';
 import './App.css';
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false); 
-  const [showSignUp, setShowSignUp] = useState(false);
-    const handleLoginClick = () =>  {
-      setShowLogin(true);
-      setShowSignUp(false); /* It then hides signup if login is clicked */
-    };
-  
-    const handleSignUpClick = () => {
-      setShowSignUp(true);
-      setShowLogin(false); /* Hides signup if login is clicked */
-    };
     
   return (
     <div>
