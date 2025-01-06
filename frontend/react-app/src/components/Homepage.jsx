@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../styles/Homepage.css';
-import headerImage from './images/pexels-pixabay-256541.jpg';
-import poetryImage from './images/peterdruryM.jpg';
-import humorImage from './images/humor.2.jpg';
-import actionImage from './images/action.jpg';
-import './App.css';
+import headerImage from '../images/pexels-pixabay-256541.jpg';
+import poetryImage from '../images/poetry.t.jpg';
+import humorImage from '../images/humor.2.jpg';
+import actionImage from '../images/action.jpg';
 
-function App() {
-    
+function Homepage() {
+  const [showLogin, setShowLogin] = useState(false); 
+  const [showSignUp, setShowSignUp] = useState(false);
+    const handleLoginClick = () =>  {
+      setShowLogin(true);
+      setShowSignUp(false); /* It then hides signup if login is clicked */
+    };
+  
+    const handleSignUpClick = () => {
+      setShowSignUp(true);
+      setShowLogin(false); /* Hides signup if login is clicked */
+    };
+
   return (
     <div>
       <header className="header">
@@ -39,4 +49,4 @@ function App() {
   );
 }
 
-export default App;
+export default Homepage;

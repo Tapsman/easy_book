@@ -11,33 +11,33 @@
     color: #666;
   }
   
+  /* HEADER */
   .header {
     text-align: center;
-    padding: 22px;
-    background-color:rgb(252, 248, 248);
-    color: white;
-    position: relative;
+    background-color: rgb(252, 248, 248);
+    padding: 40px;
+    color: #333;
   }
-  
-  .header-image {
+
+  .header-image img {
     width: 200%;
-    height: 200px;
-    background: lightgray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+    max-height: 450px;
+    object-fit: cover;
   }
   
   .message {
     background: white;
     padding: 10px;
     border-radius: 5px; /* Adds a round corner */
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.5rem;
+    color: #333;
   }
-  
+
   /* Adding button on-click */
   .nav {
-    margin: 0 12px;
+    margin: 20px auto;
     padding: 15px 25px;
     background-color: #008bff;
     color: white;
@@ -78,6 +78,13 @@
     font-weight: bold;
     transition: transform 0.3s;
   }
+
+  .category img {
+    width: 60%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
   
   .category:hover {
     transform: scale(1.05);
@@ -101,7 +108,7 @@
   form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
   
   label {
