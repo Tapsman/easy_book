@@ -42,8 +42,11 @@
     background-color: #008bff;
     color: white;
     border: none;
+    gap: 12px;
     border-radius: 7px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
   }
   
   .btn {

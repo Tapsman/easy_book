@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Homepage.css';
 import headerImage from '../images/pexels-pixabay-256541.jpg';
 import poetryImage from '../images/poetry.t.jpg';
@@ -9,15 +9,19 @@ import actionImage from '../images/action.jpg';
 function Homepage() {
   const [showLogin, setShowLogin] = useState(false); 
   const [showSignUp, setShowSignUp] = useState(false);
-    const handleLoginClick = () =>  {
-      setShowLogin(true);
-      setShowSignUp(false); /* It then hides signup if login is clicked */
-    };
+  const navigate = useNavigate();
+
+  const handleLoginClick = () =>  {
+    setShowLogin(true);
+    setShowSignUp(false); /* It then hides signup if login is clicked */
+    navigate('/login');
+  };
   
-    const handleSignUpClick = () => {
-      setShowSignUp(true);
-      setShowLogin(false); /* Hides signup if login is clicked */
-    };
+  const handleSignUpClick = () => {
+    setShowSignUp(true);
+    setShowLogin(false); /* Hides signup if login is clicked */
+    navigate('/signup');
+  };
 
   return (
     <div>
@@ -34,15 +38,15 @@ function Homepage() {
       <main className="categories">
         <Link to="/poetry" className="category">
           <img src={poetryImage} alt="Poetry" />
-          Category 1: Poetry
+          Poetry
         </Link>
         <Link to="/humor" className="category">
           <img src={humorImage} alt="Humor" />
-          Category 2: Humor
+          Humor
         </Link>
         <Link to="/action" className="category">
           <img src={actionImage} alt="Action" />
-          Category 3: Action
+          Action
         </Link>
       </main>
     </div>
