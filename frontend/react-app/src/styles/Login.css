@@ -1,10 +1,19 @@
+.body {
+    font-family: Arial, sans-serif;
+    background-color:#f4f4f4;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .Login-user {
     background-color:white;
     max-width: 400px;
-    margin: 0 auto;
+    margin: 0;
     text-align: center;
-    border-radius: 10px;
     padding: 40px;
+    border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -16,16 +25,18 @@
     text-transform: capitalize;
 }
 
-.addUser input {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.addUser .input {
+    align-items: center;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
 }
 
 .addUser .input label {
-    text-align: left;
+    align-self: flex-start;
     display: block;
     font-weight: 500;
+    width: 100%;
     color: #5c5b5b;
 }
 
@@ -34,6 +45,7 @@
     border: 1px solid #ccc;
     outline: none;
     border-radius: 5px;
+    width: 100%;
 }
 
 .addUser .input button {
@@ -44,6 +56,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-align: center;
 }
 
 .Login p {

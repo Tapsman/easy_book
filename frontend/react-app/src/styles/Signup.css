@@ -1,8 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 .signup-user {
     background-color:white;
     max-width: 400px;
+    width: 100%;
     text-align: center;
-    margin: 0 auto;
     border-radius: 10px;
     padding: 40px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -20,13 +29,16 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    align-items: center;
+    width: 100%;
 }
 
 .addUser .input label {
-    text-align: left;
+    align-self: flex-start;
     display: block;
     font-weight: 500;
     color: #5c5b5b;
+    width: 100%;
 }
 
 .addUser .input input{
@@ -34,14 +46,16 @@
     border: 1px solid #ccc;
     outline: none;
     border-radius: 5px;
+    width: 100%;
 }
 
 .addUser .input button {
     padding: 10px;
     color: white;
     background-color: rgb(23, 172, 23);
-    margin-top: 10px;
+    margin-top: 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-align: center;
 }
