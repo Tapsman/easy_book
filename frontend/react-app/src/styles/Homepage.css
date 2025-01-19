@@ -1,4 +1,4 @@
-/* App .CSS */
+/* The App .CSS */
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +11,7 @@
     color: #666;
   }
   
-  /* HEADER */
+  /* This is the HEADER */
   .header {
     text-align: center;
     background-color: rgb(252, 248, 248);
@@ -35,7 +35,7 @@
     color: #333;
   }
 
-  /* Adding button on-click */
+  /* To add the button on-click */
   .nav {
     margin: 20px auto;
     padding: 15px 25px;
