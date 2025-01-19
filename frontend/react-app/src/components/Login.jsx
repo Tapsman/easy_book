@@ -2,13 +2,33 @@ import React, { useState } from 'react'
 import '../styles/Login.css';
 
 const Login = () => {
-    const [identity, setIdentity] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        identity: '',
+        password: '',
+    });
 
-    const handleSubmit= (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+
+        const form = new FormData(e.target);
+        const identity = form.get('identity');
+        const password = form.get('password');
+
+        if (!identity || !password){
+            alert('Please fill in both fields');
+            return;
+        }
+
         console.log('Logging in with:', {identity, password});
     }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      };
 
   return (
     <div className='Login-user'>
@@ -18,21 +38,21 @@ const Login = () => {
                 <label htmlFor='identity'>Email or username:</label>
                 <input
                     type='text'
-                    id='Identity'
-                    autoComplete='off'
-                    value={identity}
+                    id='identity'
+                    name='identity'
+                    value={formData.identity}
                     onChange={(e) => setIdentity(e.target.value)}
-                    placeholder='Enter your email or username'
+                    placeholder='Enter email or username'
                     required
                     />
                 <label htmlFor='password'>Password:</label>
                 <input
                     type='password'
                     id='password'
-                    autoComplete='off'
-                    value={password}
+                    name='password'
+                    value={formData.password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Enter your password'
+                    placeholder='Enter password'
                     required
                 />
                 <button type='submit'>Login</button>

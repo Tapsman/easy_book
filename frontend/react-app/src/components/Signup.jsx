@@ -1,19 +1,28 @@
 import React, { useState } from 'react'
 import '../styles/Signup.css';
+import { useAuthStore } from '../store/AuthStore';
+
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const { signup } = useAuthStore()
+
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    })
   
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-          alert('Passwords do not match!');
-          return;
+
+        if (formData.password !== formData.confirmPassword) {
+            alert('passwords do not match!');
+            return;
         }
-        console.log('Signing up with', {username, email, password });
+
+        signup(formData)
+        console.log('Signing up with', formData);
       };
 
   return (
@@ -25,43 +34,43 @@ const Signup = () => {
                 <input
                     type='text'
                     id='username'
-                    autoComplete='off'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder='Enter yor username'
+                    name='username'
+                    value={formData.username}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value})}
+                    placeholder='Enter username'
                     required
                 />
                 <label htmlFor='email'>Email:</label>
                 <input
                     type='email'
                     id='email'
-                    autoComplete='off'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)} 
-                    placeholder='Enter your email'
+                    name='email'
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value})} 
+                    placeholder='Enter email'
                     required
                     />
                 <label htmlFor='password'>Password:</label>
                 <input
                     type='password'
                     id='password'
-                    autoComplete='off'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Enter your password'
+                    name='password'
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value})}
+                    placeholder='Enter password'
                     required
                 />
                 <label htmlFor='confirm password'>Confirm password:</label>
                 <input
                     type='password'
-                    id='confirm password'
-                    autoComplete='off'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder='Enter your confirm Password'
+                    id='confirmPassword'
+                    name='confirmPassword'
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    placeholder='Enter confirm Password'
                     required
                 />
-                <button type='submit'> Sign Up</button>
+                <button type='submit'>Sign Up</button>
             </div>
         </form>
     </div>
