@@ -41,7 +41,7 @@ const Login = () => {
                     id='identity'
                     name='identity'
                     value={formData.identity}
-                    onChange={(e) => setIdentity(e.target.value)}
+                    onChange={(e) => setFormData({ ...formData, identity: e.target.value })}
                     placeholder='Enter email or username'
                     required
                     />
@@ -51,7 +51,7 @@ const Login = () => {
                     id='password'
                     name='password'
                     value={formData.password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder='Enter password'
                     required
                 />
