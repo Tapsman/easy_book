@@ -14,11 +14,13 @@ function App() {
     <Routes>
       {/* The homepage route */}
       <Route path="/" element={<Homepage />} />
+
       {/* Catagory routes */}
       <Route path="/poetry" element={<Poetry />} />
       <Route path="/humor" element={<Humor />} />
       <Route path="/action" element={<Action />} />
 
+      {/* Authentication routes */}
       <Route path='login' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
     </Routes>
