@@ -10,8 +10,7 @@ from flask_cors import CORS
 import json
 
 app = Flask(__name__)
-
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}},supports_credentials=True)
 
 USER_UPLOAD_FOLDER = 'static/user_images/'
 BOOK_UPLOAD_FOLDER = 'static/book_images/'
@@ -70,11 +69,7 @@ login_model = api.model("Login",{
 class registerUser(Resource):
     @api.expect(user_model)
     def post(self):
-        print("called")
-        print(request.form)
         data = request.form.to_dict()
-        print(data)
-
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         username = data.get("username")
