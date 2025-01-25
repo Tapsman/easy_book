@@ -3,6 +3,8 @@ import { axiosInstance } from '../lib/axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Signup.css';
+import Navbar from './Navbar'
+
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -59,7 +61,9 @@ const Signup = () => {
     };
 
     return (
-        <div className="signup-user">
+        <div>
+            <Navbar/>
+            <div className="signup-user">
             <h2>Signup</h2>
             <form className="addUser" onSubmit={handleSubmit}>
                 <div className="input">
@@ -117,9 +121,14 @@ const Signup = () => {
                         onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
                     />
                     <button type="submit">Sign Up</button>
+                    <div className='Login'>
+                        <p>have an account? <a href='/login'>Sign in</a></p>
+                    </div>
                 </div>
             </form>
         </div>
+        </div>
+
     );
 };
 

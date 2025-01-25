@@ -3,6 +3,7 @@ import '../styles/Login.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // to handle cookies
 import { axiosInstance } from '../lib/axios';
+import Navbar from './Navbar'
 
 
 const Login = () => {
@@ -56,7 +57,9 @@ const Login = () => {
     };
 
     return (
-        <div className='Login-user'>
+        <div>
+            <Navbar/>
+            <div className='Login-user'>
             <h2>Login</h2>
             <form className='addUser' onSubmit={handleSubmit}>
                 <div className='input'>
@@ -84,9 +87,11 @@ const Login = () => {
                 </div>
             </form>
             <div className='Login'>
-                <p>Don't have an account? <a href='/signup'>Sign up here</a></p>
+                <p>Don't have an account? <a href='/signup'>Sign up</a></p>
             </div>
         </div>
+        </div>
+        
     );
 };
 

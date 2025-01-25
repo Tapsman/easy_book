@@ -49,3 +49,4 @@ insert into  books(title, category_id) values("heyy",1);
 select * from users;
 select * from books;
 select * from categories;
+select * from transactions;

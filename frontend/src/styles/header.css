@@ -1,0 +1,36 @@
+.header {
+    width: 100vw;
+    min-height: 100vh;
+    height: 100vh;
+    margin-top: 160vh;
+    z-index: 10;
+  }
+  
+  .header-image {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+  
+  .header-button {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .header-button button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .header-button button:hover {
+    background-color: #0056b3;
+  }
+  
