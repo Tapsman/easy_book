@@ -8,6 +8,7 @@ import Books from './components/books/books.jsx';
 import AddBook from './components/books/AddBook';
 import UpdateBook from './components/books/UpdateBook.jsx';
 import BookDetail from './components/books/BookDetail.jsx';
+import UpdateUser from './components/users/UpdateUser.jsx';
 
 function App() {
  return (
@@ -22,6 +23,7 @@ function App() {
       <Route path='/books/add' element={<AddBook/>}/>
       <Route path="/books/update/:bookId" element={<UpdateBook />} />    
       <Route path="/books/:id" element={<BookDetail />} />    
+      <Route path="/update-user/:userId" element={<UpdateUser />} />
       
     </Routes>
   </Router>

@@ -23,28 +23,44 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const { identity, password } = formData;
-
+    
         if (!identity || !password) {
             alert('Please fill in both fields');
             return;
         }
-
+    
         try {
             const response = await axiosInstance.post('/users/login', {
-                username: identity, // Use username to login
+                username: identity, 
                 password,
             });
-
+    
+            // Check if login is successful
             if (response.status === 200) {
-                // Save JWT to cookies if login successful
-                Cookies.set('access_token', response.data.access_token, { expires: 7 });
-                navigate('/home'); // Redirect to home page
+                Cookies.set('access_token', response.data.access_token, { expires: 7 }); // Save token
+                alert(response.data.message); // Display success message
+                navigate('/home'); // Redirect to home
             }
         } catch (error) {
-            console.error('Login failed:', error);
-            alert('Login failed, please try again.');
+            // Handle error responses from the backend
+            if (error.response) {
+                const { status, data } = error.response;
+    
+                if (status === 401 && data.message === "Invalid username") {
+                    alert('Invalid username. Please try again.');
+                } else if (status === 401 && data.message === "Invalid password") {
+                    alert('Invalid password. Please try again.');
+                } else {
+                    alert('An unexpected error occurred. Please try again.');
+                }
+                return;
+            } else {
+                console.error('Error:', error);
+                alert('Login failed due to a network error. Please try again.');
+                return;
+            }
         }
     };
 
@@ -55,7 +71,6 @@ const Login = () => {
             [name]: value,
         }));
     };
-
     return (
         <div>
             <Navbar/>

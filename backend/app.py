@@ -127,7 +127,7 @@ class LoginUser(Resource):
         
         stored_pass = user[3]
         if not stored_pass or not bcrypt.checkpw(password.encode('utf-8'), stored_pass.encode("utf-8")):
-            return {"message":"Invalid password"}
+            return {"message":"Invalid password"}, 401
         access_token = create_access_token(identity={"id":user[0],"role":user[4]}, fresh=True)
         
         return {"access_token":access_token,"message":"Login Successful"}, 200 
@@ -449,7 +449,7 @@ class DeleteBook(Resource):
 @books.route('/borrow', methods=['POST'])
 class BorrowBook(Resource):
     def post(self):
-        data = request.get_json()  
+        data = request.get_json()
         user_id = data.get("user_id")
         book_id = data.get("book_id")
 
@@ -457,6 +457,8 @@ class BorrowBook(Resource):
             return {"message": "User ID and Book ID are required."}, 400
 
         curs = mysql.connection.cursor()
+
+        # Check if the book is available
         curs.execute("SELECT id, quantity FROM books WHERE id = %s", (book_id,))
         book = curs.fetchone()
 
@@ -465,28 +467,47 @@ class BorrowBook(Resource):
         
         if book[1] <= 0:
             return {"message": "Book is out of stock."}, 400
-        
+
+        # Check if the user exists
         curs.execute("SELECT borrowed_books FROM users WHERE id = %s", (user_id,))
         user = curs.fetchone()
 
         if not user:
             return {"message": "User not found."}, 404
 
-        borrowed_books = user[0] if user[0] else []
+        borrowed_books = json.loads(user[0] or '[]')  # Load list from JSON or empty array
 
+        # Check if the user has already borrowed 3 books
+        if len(borrowed_books) >= 3:
+            return {"message": "You can borrow a maximum of 3 books."}, 400
+
+        # Check if the user has already borrowed this book
         if book_id in borrowed_books:
             return {"message": "You have already borrowed this book."}, 400
 
+        # Check if there is an existing 'borrowed' transaction for this user and book
+        curs.execute(
+            "SELECT id FROM transactions WHERE user_id = %s AND book_id = %s AND status = 'borrowed'",
+            (user_id, book_id)
+        )
+        existing_transaction = curs.fetchone()
+
+        if existing_transaction:
+            return {"message": "Transaction already exists for this book."}, 400
+
         borrowed_books.append(book_id)
         curs.execute(
-        "UPDATE users SET borrowed_books = %s WHERE id = %s",
-        (json.dumps(borrowed_books), user_id))
+            "UPDATE users SET borrowed_books = %s WHERE id = %s",
+            (json.dumps(borrowed_books), user_id)
+        )
 
+        # Decrease the quantity of the book in stock
         curs.execute(
             "UPDATE books SET quantity = quantity - 1 WHERE id = %s",
             (book_id,)
         )
 
+        # Add a new transaction for borrowing the book
         transaction_date = datetime.datetime.now()
         curs.execute(
             "INSERT INTO transactions (user_id, book_id, status, transaction_date) VALUES (%s, %s, 'borrowed', %s)",
@@ -516,7 +537,7 @@ class ReturnBook(Resource):
             if not user:
                 return {"message": "User not found."}, 404
             
-            borrowed_books = json.loads(user['borrowed_books'] or '[]')
+            borrowed_books = json.loads(user[0] or '[]')
 
             if book_id not in borrowed_books:
                 return {"message": "Book not borrowed by the user."}, 400

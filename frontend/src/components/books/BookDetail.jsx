@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../lib/axios";
 import Navbar from '../Navbar';
 import Cookies from 'js-cookie';
-import { jwtDecode } from "jwt-decode"; // Import jwtDecode from jwt-decode
+import { jwtDecode } from "jwt-decode"; 
+import "../../styles/BookDetail.css"
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -34,8 +35,8 @@ const BookDetail = () => {
     const fetchUserDetails = async () => {
       const token = Cookies.get("access_token");
       if (token) {
-        const decodedToken = jwtDecode(token); // Decode JWT token to get user info
-        const userId = decodedToken.sub.id; // Accessing user_id using decodedToken.sub.id
+        const decodedToken = jwtDecode(token); 
+        const userId = decodedToken.sub.id; 
 
         try {
           const response = await axiosInstance.get(`/users/details/${userId}`);
@@ -61,7 +62,7 @@ const BookDetail = () => {
     if (!token) return;
 
     const decodedToken = jwtDecode(token); // Decode to get user ID
-    const userId = decodedToken.sub.id; // Accessing user_id using decodedToken.sub.id
+    const userId = decodedToken.sub.id; // Accessing user_id
 
     try {
       const response = await axiosInstance.post("/books/borrow", {
@@ -105,6 +106,9 @@ const BookDetail = () => {
   return (
     <div>
       <Navbar />
+      <a href="/books" className="back-button">
+        &#8592; Back to Books
+      </a>
       <div className="book-detail-container">
         {book && (
           <>

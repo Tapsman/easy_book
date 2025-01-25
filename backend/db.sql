@@ -2,7 +2,6 @@ drop database db_library;
 create database if not exists db_library;
 use db_library;
 
--- Users table
 CREATE TABLE if not exists users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
@@ -13,7 +12,7 @@ CREATE TABLE if not exists users (
     borrowed_books JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
--- categories table
+
 create table if not exists categories(
 	id int auto_increment primary key,
     name varchar(20),
@@ -34,9 +33,10 @@ CREATE TABLE if not exists books (
 );
 
 -- Transactions table
+drop table transactions;
 CREATE TABLE if not exists transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE NOT NULL,
+    user_id INT NOT NULL,
     book_id INT NOT NULL,
     status ENUM('borrowed', 'returned') DEFAULT 'borrowed',
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -44,8 +44,6 @@ CREATE TABLE if not exists transactions (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
-insert into categories(name,description) values("hhh","yooo");
-insert into  books(title, category_id) values("heyy",1);
 select * from users where role = "admin";
 select * from books;
 DELETE FROM books where id = 1;

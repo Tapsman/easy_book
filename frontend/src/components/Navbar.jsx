@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <a href="/"><h1>EasyBook</h1></a>
+        <h1>EasyBook</h1>
       </div>
       <ul className="navbar-links">
         {!accessToken && (
