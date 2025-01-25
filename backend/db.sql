@@ -46,7 +46,9 @@ CREATE TABLE if not exists transactions (
 );
 insert into categories(name,description) values("hhh","yooo");
 insert into  books(title, category_id) values("heyy",1);
-select * from users;
+select * from users where role = "admin";
 select * from books;
+DELETE FROM books where id = 1;
 select * from categories;
 select * from transactions;
+

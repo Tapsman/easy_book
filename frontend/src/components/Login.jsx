@@ -17,7 +17,7 @@ const Login = () => {
     useEffect(() => {
         const token = Cookies.get('access_token');
         if (token) {
-            navigate('/'); // Redirect to home if token exists
+            navigate('/home'); // Redirect to home if token exists
         }
     }, [navigate]);
 
@@ -40,7 +40,7 @@ const Login = () => {
             if (response.status === 200) {
                 // Save JWT to cookies if login successful
                 Cookies.set('access_token', response.data.access_token, { expires: 7 });
-                navigate('/'); // Redirect to home page
+                navigate('/home'); // Redirect to home page
             }
         } catch (error) {
             console.error('Login failed:', error);

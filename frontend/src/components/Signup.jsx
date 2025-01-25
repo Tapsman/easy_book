@@ -52,7 +52,7 @@ const Signup = () => {
 
             if (loginResponse.status === 200) {
                 Cookies.set('access_token', loginResponse.data.access_token, { expires: 7 });
-                navigate('/'); // Redirect to home page after login
+                navigate('/home'); // Redirect to home page after login
             }
         } catch (error) {
             console.error('Error:', error.response?.data || error.message);

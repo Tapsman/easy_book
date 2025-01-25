@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode"; // Import jwt-decode
 import "../styles/navbar.css";
 
 const Navbar = () => {
@@ -13,14 +14,12 @@ const Navbar = () => {
     setAccessToken(token);
 
     if (token) {
-      const parseJwt = (token) => {
-        try {
-          return JSON.parse(atob(token.split(".")[1]));
-        } catch (e) {
-          return null;
-        }
-      };
-      setUserInfo(parseJwt(token));
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserInfo(decodedToken.sub); // Set the decoded user info
+      } catch (e) {
+        console.error("Error decoding token", e);
+      }
     }
   }, []);
 
@@ -35,7 +34,6 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-logo">
         <a href="/"><h1>EasyBook</h1></a>
-        
       </div>
       <ul className="navbar-links">
         {!accessToken && (
@@ -56,7 +54,7 @@ const Navbar = () => {
             <li>
               <button onClick={() => navigate("/history")}>History</button>
             </li>
-            {userInfo?.role === "staff" && (
+            {userInfo?.role === "admin" && (
               <li>
                 <button onClick={() => navigate("/users")}>List Users</button>
               </li>

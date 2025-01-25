@@ -338,11 +338,20 @@ class ListBooks(Resource):
     def get(self):
         curs = mysql.connection.cursor()
         try:
-            curs.execute("SELECT id, title, description, image, quantity FROM books")
+            # Get page and limit from query parameters, default to page 1 and limit 10
+            page = int(request.args.get("page", 1))
+            limit = int(request.args.get("limit", 10))
+            offset = (page - 1) * limit
+
+            # Fetch books with pagination
+            curs.execute("SELECT id, title, description, image, quantity FROM books LIMIT %s OFFSET %s", (limit, offset))
             books = curs.fetchall()
 
+            # Check if books exist
             if books:
-                return {"books": books}, 200
+                books = [{"id": row[0], "title": row[1], "description": row[2], "image": row[3], "quantity": row[4]} for row in books]
+                return {"books": books, "page": page, "limit": limit}, 200
+
             return {"message": "No books found."}, 404
         except Exception as e:
             return {"message": f"Error: {str(e)}"}, 500
