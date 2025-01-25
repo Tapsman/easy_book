@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // For getting bookId from URL
 import { axiosInstance } from "../../lib/axios"; // Import your custom axios instance
 import "../../styles/UpdateBook.css"; // Import your CSS
+import Navbar from '../Navbar';
 
 const UpdateBook = () => {
   const { bookId } = useParams(); // Get the bookId from the URL params
@@ -83,7 +84,9 @@ const UpdateBook = () => {
   };
 
   return (
-    <div className="update-book-container">
+    <div>
+      <Navbar/>
+<div className="update-book-container">
       <h2>Update Book</h2>
       {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
@@ -119,6 +122,8 @@ const UpdateBook = () => {
         </button>
       </form>
     </div>
+    </div>
+
   );
 };
 

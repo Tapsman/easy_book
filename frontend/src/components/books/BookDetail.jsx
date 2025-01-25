@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../lib/axios";
+import Navbar from '../Navbar';
 
 
 const BookDetail = () => {
@@ -39,7 +40,9 @@ const BookDetail = () => {
   }
 
   return (
-    <div className="book-detail-container">
+    <div>
+      <Navbar/>
+<div className="book-detail-container">
       {book && (
         <>
           <h2>{book.title}</h2>
@@ -53,6 +56,8 @@ const BookDetail = () => {
         </>
       )}
     </div>
+    </div>
+    
   );
 };
 
