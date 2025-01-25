@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import {jwtDecode} from "jwt-decode"; // Import jwt-decode
+import {jwtDecode} from "jwt-decode"; 
 import "../styles/navbar.css";
 
 const Navbar = () => {
@@ -16,7 +16,7 @@ const Navbar = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        setUserInfo(decodedToken.sub); // Set the decoded user info
+        setUserInfo(decodedToken.sub); 
       } catch (e) {
         console.error("Error decoding token", e);
       }
@@ -52,7 +52,7 @@ const Navbar = () => {
               <button onClick={handleLogout}>Logout</button>
             </li>
             <li>
-              <button onClick={() => navigate("/history")}>History</button>
+              <button onClick={() => navigate("/history")}>Owned Books</button>
             </li>
             {userInfo?.role === "admin" && (
               <li>
