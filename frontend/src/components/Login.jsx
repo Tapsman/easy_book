@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import '../styles/Login.css';
-import { useAuthStore } from '../store/AuthStore';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // to handle cookies
+import { axiosInstance } from '../lib/axios';
 
 
 const Login = () => {
@@ -8,63 +10,84 @@ const Login = () => {
         identity: '',
         password: '',
     });
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    // Check if there's a token on page load
+    useEffect(() => {
+        const token = Cookies.get('access_token');
+        if (token) {
+            navigate('/'); // Redirect to home if token exists
+        }
+    }, [navigate]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const form = new FormData(e.target);
-        const identity = form.get('identity');
-        const password = form.get('password');
+        const { identity, password } = formData;
 
-        if (!identity || !password){
+        if (!identity || !password) {
             alert('Please fill in both fields');
             return;
         }
 
-        console.log('Logging in with:', {identity, password});
-    }
+        try {
+            const response = await axiosInstance.post('/users/login', {
+                username: identity, // Use username to login
+                password,
+            });
+
+            if (response.status === 200) {
+                // Save JWT to cookies if login successful
+                Cookies.set('access_token', response.data.access_token, { expires: 7 });
+                navigate('/'); // Redirect to home page
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Login failed, please try again.');
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
-          ...prevState,
-          [name]: value,
+            ...prevState,
+            [name]: value,
         }));
-      };
+    };
 
-  return (
-    <div className='Login-user'>
-        <h2>Login</h2>
-        <form className='addUser' onSubmit={handleSubmit}>
-            <div className='input'>
-                <label htmlFor='identity'>Email or username:</label>
-                <input
-                    type='text'
-                    id='identity'
-                    name='identity'
-                    value={formData.identity}
-                    onChange={(e) => setFormData({ ...formData, identity: e.target.value })}
-                    placeholder='Enter email or username'
-                    required
+    return (
+        <div className='Login-user'>
+            <h2>Login</h2>
+            <form className='addUser' onSubmit={handleSubmit}>
+                <div className='input'>
+                    <label htmlFor='identity'>Username:</label>
+                    <input
+                        type='text'
+                        id='identity'
+                        name='identity'
+                        value={formData.identity}
+                        onChange={handleInputChange}
+                        placeholder='Enter username'
+                        required
                     />
-                <label htmlFor='password'>Password:</label>
-                <input
-                    type='password'
-                    id='password'
-                    name='password'
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    placeholder='Enter password'
-                    required
-                />
-                <button type='submit'>Login</button>
+                    <label htmlFor='password'>Password:</label>
+                    <input
+                        type='password'
+                        id='password'
+                        name='password'
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        placeholder='Enter password'
+                        required
+                    />
+                    <button type='submit'>Login</button>
+                </div>
+            </form>
+            <div className='Login'>
+                <p>Don't have an account? <a href='/signup'>Sign up here</a></p>
             </div>
-        </form>
-        <div className='Login'>
-            <p>Don't have an account<a href='/signup'>Sign up here</a></p>
         </div>
-    </div>
-  )
-}
+    );
+};
 
-export default Login
+export default Login;

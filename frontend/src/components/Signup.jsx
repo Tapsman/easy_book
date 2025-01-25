@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { axiosInstance } from '../lib/axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Signup.css';
-import { axiosInstance } from '../lib/axios'
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -9,18 +11,19 @@ const Signup = () => {
         last_name: '',
         password: '',
         confirmPassword: '',
-        role: 'user', // default role
-        image: null, // file input for image
+        role: 'user',
+        image: null,
     });
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (formData.password !== formData.confirmPassword) {
             alert('Passwords do not match!');
             return;
         }
-    
+
         try {
             const data = new FormData();
             data.append('username', formData.username);
@@ -31,23 +34,30 @@ const Signup = () => {
             if (formData.image) {
                 data.append('image', formData.image);
             }
-    
+
             const response = await axiosInstance.post('/users/register', data, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-    
-            // Display success message
-            alert(response.data.message || 'User registered successfully!');
-        } catch (error) {
-            if (error.response) {
-                // Display backend error message
-                alert(error.response.data.message || 'An error occurred while registering the user.');
-            } else {
-                console.error('Error:', error.message);
-                alert('Network or server error occurred.');
+
+            console.log('Response:', response.data);
+            alert('User registered successfully!');
+
+            // Login after successful registration
+            const loginResponse = await axiosInstance.post('/users/login', {
+                username: formData.username,
+                password: formData.password,
+            });
+
+            if (loginResponse.status === 200) {
+                Cookies.set('access_token', loginResponse.data.access_token, { expires: 7 });
+                navigate('/'); // Redirect to home page after login
             }
+        } catch (error) {
+            console.error('Error:', error.response?.data || error.message);
+            alert('Registration failed. Please try again.');
         }
     };
+
     return (
         <div className="signup-user">
             <h2>Signup</h2>
