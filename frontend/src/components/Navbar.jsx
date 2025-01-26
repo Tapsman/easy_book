@@ -52,7 +52,7 @@ const Navbar = () => {
               <button onClick={handleLogout}>Logout</button>
             </li>
             <li>
-              <button onClick={() => navigate("/history")}>Owned Books</button>
+              <button onClick={() => navigate(`/update-user/${userInfo.id}`)}>update profile</button>
             </li>
             {userInfo?.role === "admin" && (
               <li>

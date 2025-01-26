@@ -84,6 +84,9 @@ const Books = () => {
   return (
     <div>
       <Navbar />
+      <a href="/" className="back-button">
+        &#8592; Back
+      </a>
       <div className="books-container">
         {books.length === 0 ? (
           <p>No books found.</p>

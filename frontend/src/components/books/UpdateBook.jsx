@@ -86,6 +86,9 @@ const UpdateBook = () => {
   return (
     <div>
       <Navbar/>
+      <a href="/books" className="back-button">
+        &#8592; Back
+      </a>
 <div className="update-book-container">
       <h2>Update Book</h2>
       {message && <p>{message}</p>}

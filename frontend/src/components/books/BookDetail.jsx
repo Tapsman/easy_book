@@ -107,7 +107,7 @@ const BookDetail = () => {
     <div>
       <Navbar />
       <a href="/books" className="back-button">
-        &#8592; Back to Books
+        &#8592; Back
       </a>
       <div className="book-detail-container">
         {book && (

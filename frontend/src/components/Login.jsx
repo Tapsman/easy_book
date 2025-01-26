@@ -17,7 +17,7 @@ const Login = () => {
     useEffect(() => {
         const token = Cookies.get('access_token');
         if (token) {
-            navigate('/home'); // Redirect to home if token exists
+            navigate('/books'); 
         }
     }, [navigate]);
 
@@ -41,7 +41,7 @@ const Login = () => {
             if (response.status === 200) {
                 Cookies.set('access_token', response.data.access_token, { expires: 7 }); // Save token
                 alert(response.data.message); // Display success message
-                navigate('/home'); // Redirect to home
+                navigate('/books'); // Redirect to home
             }
         } catch (error) {
             // Handle error responses from the backend
